@@ -1,9 +1,7 @@
 package dataFrame
 import visitor.Visitor
 
-import scala.jdk.CollectionConverters._
 import scala.annotation.tailrec
-import scala.collection.convert.ImplicitConversions.`seq AsJavaList`
 import scala.language.postfixOps
 
 
@@ -12,7 +10,7 @@ class ScalaDirectory() extends ScalaDataFrame {
   var children: List[ScalaDataFrame] = List()
 
 
-  override def at(row: Int, column: String): Object = aux(_,_,children)
+  override def at(row: Int, column: String): Object = aux(row,column,children)
 
   /*def aux (row: Int, column: String, list: List[ScalaDataFrame]): Object = (list) match {
     case (Nil) => "Index not valid, element not found"
@@ -28,8 +26,9 @@ class ScalaDirectory() extends ScalaDataFrame {
       else aux(row, column, list)
   }
 
-  override def iat(row: Int, column: Int): Object =
-    at(row, this.getCategories().get(column))
+  override def iat(row: Int, column: Int): Object = {
+    at(row,this.getCategories()(column))
+  }
 
   override def columns(): Int =
     children.foldLeft(0) { (acc, df) => acc + df.columns() }
@@ -45,7 +44,7 @@ class ScalaDirectory() extends ScalaDataFrame {
     children = children.filter(_!=child)
 
   override def getCategories(): List[String] = children.map((x) =>
-    x.getCategories()).reduce((x,y) =>x.filterNot(c=>y.contains(c))).distinct
+    x.getCategories()).reduce((x,y) =>x.filter(c=>y.contains(c))).distinct
 
   def getChildren:List[ScalaDataFrame] = children
 

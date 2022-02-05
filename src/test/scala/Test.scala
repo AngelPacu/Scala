@@ -1,13 +1,15 @@
-package scala
 
-import JavaFactories.AbstractFactory
+
+
+
 import JavaFactories.AbstractFactory
 import dataFrame.{ScalaDataFrame, ScalaDirectory, ScalaFileDF}
+import org.scalatest.funsuite.AnyFunSuite
+
 import java.io.File
-import org.scalatest.FunSuite
 import visitor.{CounterVisitor, FilterVisitor}
 
-class Test extends FunSuite {
+class Test extends AnyFunSuite {
 
   val input = new File("dataFiles/cities.csv")
   val factory = AbstractFactory.create(input)
@@ -24,7 +26,7 @@ class Test extends FunSuite {
     }
 
   test("**** Test Directory ****"){
-    println("***** TEST 3 - ScalaDirectory *****")
+    println("***** TEST 2 - ScalaDirectory *****")
     testDirectory.add(dataFile)
     testDirectory.add(dataFile2)
     testDirectory.add(dataFile2)
