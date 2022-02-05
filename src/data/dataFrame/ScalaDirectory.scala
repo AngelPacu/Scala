@@ -18,17 +18,24 @@ class ScalaDirectory() extends ScalaDataFrame {
 
   */
 
-  override def at(row: Int, column: String): Object = (children) match {
-    case (Nil) => "NULL"
-    case (x :: xs) => if(this.size<=row) "Index not valid, element not found" else null //aux(row,column,children)
+  override def at(row: Int, column: String): Object = aux(_,_,children)
+
+  /*def aux (row: Int, column: String, list: List[ScalaDataFrame]): Object = (list) match {
+    case (Nil) => "Index not valid, element not found"
+    case (x::list) => if (x.size()<=row) aux(row-x.size(),column,list) else x.at(row,column)
+  }*/
+
+  @tailrec
+  private def aux(row: Int, column: String, list: List[ScalaDataFrame]): Object = (list) match {
+    case (Nil) => "Index not valid, element not found"
+    case (x::list) =>
+      if(x.getCategories().contains(column))
+          if (x.size()<=row) aux(row-x.size(),column,list) else x.at(row,column)
+      else aux(row, column, list)
   }
 
-  def aux (row: Int, column: Object, lista: List[ScalaDataFrame]): Object = (children) match {
-    case (Nil) => "NULL"
-    case (x::lista) => if (x.size()<=row) aux(row-x.size(),_,lista) else x.at(row,_)
-  }
-
-  override def iat(row: Int, column: Int): Object = null
+  override def iat(row: Int, column: Int): Object =
+    at(row, this.getCategories().get(column))
 
   override def columns(): Int =
     children.foldLeft(0) { (acc, df) => acc + df.columns() }

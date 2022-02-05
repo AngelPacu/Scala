@@ -1,6 +1,6 @@
 package dataFrame
 
-trait ScalaDataFrame {
+trait ScalaDataFrame extends Visitable{
 
   def at(row: Int, column: String): Object
 
@@ -10,9 +10,12 @@ trait ScalaDataFrame {
 
   def size(): Int
 
-  //def getCategories(): List[String]
+  def getCategories(): List[String]
 
-  //def accept (visitor: Visitor, column: String): Unit = visitor.visit()
+  def getField(label: String): List[Object]
 
-
+  def accept (v: visitor.Visitor): Unit = {
+    v.reset()
+    v.visit(this)
+  }
 }
