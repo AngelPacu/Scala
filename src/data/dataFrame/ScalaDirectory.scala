@@ -1,22 +1,16 @@
 package dataFrame
+import visitor.Visitor
+
+import scala.jdk.CollectionConverters._
+import scala.annotation.tailrec
+import scala.collection.convert.ImplicitConversions.`seq AsJavaList`
+import scala.language.postfixOps
+
 
 class ScalaDirectory() extends ScalaDataFrame {
 
   var children: List[ScalaDataFrame] = List()
 
-  /*override def at(row: Int, column: String): Object = (children) match {
-    case (Nil) => "Element not found"
-    /*case (x :: xs) => if(x.size <= row) at(row-x.size,column) else x.at(row, column)*/ //X = df
-    case (x :: xs) => if(this.size<=row) "Index not valid, element not found" else aux(row, column,0) //X = df
-  }
-   */
-
- /* def aux (row: Int, column: String, actual: Int): Object = (children) match {
-    case (Nil) => "NULL"
-    case (x::xs) => if (x.size()<=row) aux(row-x.size(),column,actual+1) else x.at(row,column)
-  }
-
-  */
 
   override def at(row: Int, column: String): Object = aux(_,_,children)
 
@@ -50,5 +44,19 @@ class ScalaDirectory() extends ScalaDataFrame {
   def remove(child: ScalaDataFrame): Unit =
     children = children.filter(_!=child)
 
-  //override def getCategories(): List[String] = ???
+  override def getCategories(): List[String] = children.map((x) =>
+    x.getCategories()).reduce((x,y) =>x.filterNot(c=>y.contains(c))).distinct
+
+  def getChildren:List[ScalaDataFrame] = children
+
+  override def accept(v: Visitor): Unit = super.accept(v)
+
+  override def getField(label: String): List[Object] = null;
+//getFieldAux(label,children, List())
+
+ /* private def getFieldAux(label: String, list: List[ScalaDataFrame], default:List[Object]): null /* List[Object] = (list) match{
+    case Nil => default
+    case (x::xs) => x.getField(String) :: getFieldAux(label,xs,default)
+  }*/*/
+
 }

@@ -1,4 +1,6 @@
 package dataFrame
+import visitor.Visitable
+
 
 trait ScalaDataFrame extends Visitable{
 

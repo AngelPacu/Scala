@@ -1,28 +1,64 @@
+package scala
 
-
+import JavaFactories.AbstractFactory
 import JavaFactories.AbstractFactory
 import dataFrame.{ScalaDataFrame, ScalaDirectory, ScalaFileDF}
 import java.io.File
+import org.scalatest.FunSuite
+import visitor.{CounterVisitor, FilterVisitor}
 
+class Test extends FunSuite {
 
-object Test {
+  val input = new File("dataFiles/cities.csv")
+  val factory = AbstractFactory.create(input)
+  val dataFile: ScalaDataFrame = new ScalaFileDF(factory.frame(input))
+  val dataFile2: ScalaDataFrame = new ScalaFileDF(factory.frame(input))
+  val testDirectory: ScalaDirectory = new ScalaDirectory()
 
-  def main(args: Array[String]): Unit = {
-    //var input = List[File]("dataFiles/cities.csv","dataFiles/cities.csv")
-    val input = new File("dataFiles/cities.csv")
-    val factory = AbstractFactory.create(input)
-    val dataFile: ScalaDataFrame = new ScalaFileDF(factory.frame(input))
-    val dataFile2: ScalaDataFrame = new ScalaFileDF(factory.frame(input))
-    println(dataFile.size())
-    println(dataFile.columns())
-    println(dataFile.iat(0,0))
-    val directoriProva: ScalaDirectory = new ScalaDirectory()
-    directoriProva.add(dataFile)
-    directoriProva.add(dataFile2)
-    directoriProva.add(dataFile2)
-    directoriProva.add(dataFile2)
-    println("Tamaño Directorio"+directoriProva.size())
-    println(directoriProva.columns())
-    println(directoriProva.at(511,"LatD"))
+  test("**** TEST 1 - DataFrame ****") {
+      println("**** TEST 1 - DataFrame ****")
+      println("Size DF: "+dataFile.size())
+      println("Size Labels: "+dataFile.columns())
+      println("AT: "+dataFile.at(0,"LatD"))
+      println("IAT: "+dataFile.iat(0,0))
+    }
+
+  test("**** Test Directory ****"){
+    println("***** TEST 3 - ScalaDirectory *****")
+    testDirectory.add(dataFile)
+    testDirectory.add(dataFile2)
+    testDirectory.add(dataFile2)
+    testDirectory.add(dataFile2)
+    println("Size DIRECTORY: " + testDirectory.size())
+    println("AT: "+testDirectory.columns())
+    println("AT: "+testDirectory.at(127, "LatD"))
+    println("IAT: "+testDirectory.iat(127, 1))
   }
+
+  test("**** Test Visitors ****"){
+    println("***** TEST 3 - Visitors *****")
+    testDirectory.add(dataFile)
+    testDirectory.add(dataFile2)
+    testDirectory.add(dataFile2)
+    testDirectory.add(dataFile2)
+
+    val c = new CounterVisitor()
+    val f = new FilterVisitor((x) => x.asInstanceOf[Long]>48,"LatD")
+    testDirectory.accept(c)
+    println("DataFrame files: " + c.files + " DataFrame dirs: " + c.dirs)
+
+    val root: ScalaDirectory = new ScalaDirectory()
+    testDirectory.remove(dataFile)
+    root.add(testDirectory)
+    root.add(dataFile)
+    root.accept(c)
+    root.accept(c)
+    root.accept(f)
+    println("DataFrame files: " + c.files + " DataFrame dirs: " + c.dirs)
+    println("Query:"+f.listResult)
+    testDirectory.accept(f)
+    println("Query:"+f.listResult)
+  }
+
+
 }
