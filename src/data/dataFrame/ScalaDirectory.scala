@@ -1,6 +1,4 @@
 package dataFrame
-import visitor.Visitor
-
 import scala.annotation.tailrec
 import scala.language.postfixOps
 
@@ -48,14 +46,10 @@ class ScalaDirectory() extends ScalaDataFrame {
 
   def getChildren:List[ScalaDataFrame] = children
 
-  override def accept(v: Visitor): Unit = super.accept(v)
+  override def getField(label: String): List[Object] = getFieldAux(label,children, List())
 
-  override def getField(label: String): List[Object] = null;
-//getFieldAux(label,children, List())
-
- /* private def getFieldAux(label: String, list: List[ScalaDataFrame], default:List[Object]): null /* List[Object] = (list) match{
+  private def getFieldAux(label: String, list: List[ScalaDataFrame], default:List[Object]): List[Object] = (list) match {
     case Nil => default
-    case (x::xs) => x.getField(String) :: getFieldAux(label,xs,default)
-  }*/*/
-
+    case (x::xs) => getFieldAux(label,xs,default) ::: x.getField(label)
+  }
 }
