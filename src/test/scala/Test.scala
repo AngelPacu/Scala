@@ -61,6 +61,8 @@ class Test extends AnyFunSuite {
     println("Query:"+f.listResult)
     testDirectory.accept(f)
     println("Query:"+f.listResult)
+
+    f.accept(f)
   }
 
   test("**** Test Recursivity ****"){

@@ -52,4 +52,13 @@ class ScalaDirectory() extends ScalaDataFrame {
     case Nil => default
     case x :: xs => getFieldAux(label, xs, default) ::: x.getField(label)
   }
+
+  override def toString: String = {
+    var result: String = new String
+    for {sDf <- getChildren} yield result += "-Child "+children.indexOf(sDf)+"\n"+sDf.toString
+    result
+  }
 }
+
+
+
