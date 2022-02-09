@@ -6,15 +6,13 @@ class FilterVisitor(pred: Object => Boolean, label: String) extends Visitor {
   var column: String = label
 
   override def visit(sDf: ScalaDataFrame): Unit = {
-    listResult = sDf.getField(column).filter(pred)
-    /*for {
+    //listResult = sDf.getField(column).filter(pred)
+    for {
       i <- 0 until sDf.size()
-      if (pred(sDf.at(i, column)))
+      if pred(sDf.at(i, column))
     } yield listResult = sDf.at(i, column) :: listResult
 
-     */
   }
-
   override def reset(): Unit = listResult = List[Object]()
 }
 

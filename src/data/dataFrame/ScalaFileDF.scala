@@ -1,6 +1,7 @@
 package dataFrame
 
 import visitor.Visitor
+
 import scala.jdk.CollectionConverters._
 
 class ScalaFileDF(df: JavaDataframes.DataFrame) extends ScalaDataFrame {
@@ -22,4 +23,6 @@ class ScalaFileDF(df: JavaDataframes.DataFrame) extends ScalaDataFrame {
   override def accept(v: Visitor): Unit = super.accept(v)
 
   override def getField(label: String): List[Object] = df.getData.get(label).asScala.toList
+
+  override def toString: String = df.toString
 }

@@ -8,10 +8,10 @@ class CounterVisitor extends visitor.Visitor {
 
   override def visit(sDf: ScalaDataFrame): Unit ={
     sDf match {
-      case directory: ScalaDirectory =>
+      case _: ScalaDirectory =>
         dirs += 1
         sDf.asInstanceOf[ScalaDirectory].getChildren.foreach(x=>visit(x))
-      case file: ScalaFileDF =>files+=1
+      case _: ScalaFileDF =>files+=1
     }
   }
 

@@ -15,7 +15,6 @@ public interface DataFrameFactory {
      * que hemos tratado.
      * @param input: Fichero a leer.
      * @return Devuelve una estructura DataFrame {HashMap,ArrayList}
-     * @throws IOException
      */
     DataFrame frame(File input, String... delim) throws IOException;
 

@@ -2,7 +2,7 @@ package dataFrame
 import visitor.Visitable
 
 
-trait ScalaDataFrame extends Visitable{
+trait ScalaDataFrame extends Visitable {
 
   def at(row: Int, column: String): Object
 
@@ -14,6 +14,11 @@ trait ScalaDataFrame extends Visitable{
 
   def getCategories(): List[String]
 
+  /**
+   * Add a method to the DataFrame to retrieve one of the columns as a list so that we can apply operations to all values of a column next.
+   * @param label: A column
+   * @return Values List
+   */
   def getField(label: String): List[Object]
 
   def accept (v: visitor.Visitor): Unit = {
